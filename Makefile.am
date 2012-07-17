@@ -27,6 +27,7 @@ SUBDIRS = \
 	Flickr \
 	GNOME-Calculator \
 	GNOME-Dictionary \
+	GNOME-Keyring \
 	GNOME-Screenshot \
 	GNOME-Session \
 	GNOME-Terminal \

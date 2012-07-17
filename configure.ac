@@ -335,6 +335,8 @@ GNOME-Calculator/Makefile
 GNOME-Calculator/Resources/GNOME-Calculator.addin.xml
 GNOME-Dictionary/Makefile
 GNOME-Dictionary/Resources/GNOME-Dictionary.addin.xml
+GNOME-Keyring/Makefile
+GNOME-Keyring/Resources/GNOME-Keyring.addin.xml
 GNOME-Screenshot/Makefile
 GNOME-Screenshot/Resources/GNOME-Screenshot.addin.xml
 GNOME-Session/Makefile
