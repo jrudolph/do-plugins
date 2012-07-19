@@ -51,13 +51,13 @@ namespace Keyring
 				// don't access locked keyrings for now
 				if (Ring.GetKeyringInfo (keyring.Name).Locked)
 					yield break;
-					//Ring.Unlock (keyring.Name, null);
 
 				foreach (int id in Ring.ListItemIDs (keyring.Name)) {
 					ItemData info = Ring.GetItemInfo (keyring.Name, id);
 
-					if (info.Type == ItemType.GenericSecret)
-						yield return new KeyItem (id, info.Attributes ["name"] as string, info.Secret);
+					// for some reason stored passwords can be both reported as GenericSecret or Note
+					if (info.Type == ItemType.GenericSecret || info.Type == ItemType.Note)
+						yield return new KeyItem (id, info.Attributes ["name"] as string, info.Keyring);
 				}
 			}
 		}
@@ -190,14 +190,17 @@ namespace Keyring
 	public class KeyItem : Item, ITextItem
 	{
 		string name;
-		string secret;
-		public KeyItem(int id, string name, string secret)
+		public KeyItem(int id, string name, string keyring)
 		{
 			this.Id = id;
+			this.Keyring = keyring;
 			this.name = name;
-			this.secret = secret;
 		}
 		public int Id {
+			get;
+			private set;
+		}
+		public string Keyring {
 			get;
 			private set;
 		}
@@ -214,27 +217,7 @@ namespace Keyring
 		}
 
 		public string Text {
-			get { return secret; }
+			get { return Ring.GetItemInfo(this.Keyring, this.Id).Secret; }
 		}
 	}
 }
-
-/*
- * 
- * using Gnome.Keyring;
-
-class TestClass
-{
-    static void Main(string[] args)
-    {
-        // Display the number of command line arguments:
-        System.Console.WriteLine(args.Length);
-		string keyring = "telfish";
-		int id = 5;
-		System.Console.WriteLine(string.Join (", ", Ring.ListItemIDs(keyring)));
-		Ring.Lock(keyring);
-		Ring.Unlock(keyring, null);
-		System.Console.WriteLine(Ring.Find(ItemType.GenericSecret, Ring.GetItemAttributes(keyring, id))[0].Secret);
-    }
-}
-*/
