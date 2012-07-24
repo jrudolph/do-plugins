@@ -63,6 +63,49 @@ namespace Keyring
 		}
 	}
 
+	public class CreatePasswordAction : KeyringAction
+	{
+		public override string Name
+		{
+			get { return AddinManager.CurrentLocalizer.GetString ("Create password"); }
+		}
+
+		public override string Description
+		{
+			get { return AddinManager.CurrentLocalizer.GetString ("Creates a new password."); }
+		}
+
+		public override string Icon
+		{
+			get { return "seahorse"; }
+		}
+		protected override void Run (KeyringItem ring, IEnumerable<Item> modItems) 
+		{
+			foreach (var target in modItems) {
+				var name = (target as ITextItem).Text;
+				var password = createPassword ();
+				Ring.CreateItem(ring.Name, ItemType.Note, name, new System.Collections.Hashtable(), password, false);
+				Do.Platform.Services.Environment.CopyToClipboard(new Do.Universe.Common.TextItem(password));
+			}
+		}
+		private string createPassword() {
+			return string.Concat (generateChars (25));
+		}
+		private IEnumerable<char> generateChars(int num) {
+			var range = 94; //126 - 32, that's from space to tilde;
+			Random random = new Random();
+			for (int i = 0; i < num; i++)
+				yield return Convert.ToChar(random.Next(range) + 32);
+		}
+		protected override bool Supported (KeyringItem ring)
+		{
+			return !ring.Locked;
+		}
+		public override IEnumerable<Type> SupportedModifierItemTypes
+		{
+			get { yield return typeof (ITextItem); }
+		}
+	}
 	public class LockAction : KeyringAction
 	{
 		public override string Name
@@ -79,7 +122,7 @@ namespace Keyring
 		{
 			get { return "locked"; }
 		}
-		protected override void Run (KeyringItem ring) 
+		protected override void Run (KeyringItem ring, IEnumerable<Item> modItems) 
 		{
 			Ring.Lock (ring.Name);
 		}
@@ -104,7 +147,7 @@ namespace Keyring
 		{
 			get { return "object-unlocked"; }
 		}
-		protected override void Run (KeyringItem ring) 
+		protected override void Run (KeyringItem ring, IEnumerable<Item> modItems) 
 		{
 			Ring.Unlock (ring.Name, null);
 		}
@@ -148,12 +191,12 @@ namespace Keyring
 			foreach (Item item in items)
 			{
 				KeyringItem ring = item as KeyringItem;
-				Run (ring);
+				Run (ring, modItems);
 			}
 
 			yield break;
 		}
-		protected abstract void Run (KeyringItem ring);
+		protected abstract void Run (KeyringItem ring, IEnumerable<Item> modItems);
 		protected abstract bool Supported (KeyringItem ring);
 	}
 

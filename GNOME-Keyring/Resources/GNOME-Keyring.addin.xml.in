@@ -24,5 +24,6 @@
 	<Extension path= "/Do/Action">
 		<Action type="Keyring.LockAction" />
 		<Action type="Keyring.UnlockAction" />
+		<Action type="Keyring.CreatePasswordAction" />
 	</Extension>
 </Addin>
