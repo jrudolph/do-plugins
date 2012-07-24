@@ -135,12 +135,12 @@ namespace Keyring
 		
 		public override IEnumerable<Type> SupportedModifierItemTypes
 		{
-			get { yield return typeof (ITextItem); }
+			get { yield break; }
 		}
 		
 		public override bool ModifierItemsOptional
 		{
-			get { return true; }
+			get { return false; }
 		}
 
 		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
