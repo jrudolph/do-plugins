@@ -83,7 +83,7 @@ namespace Keyring
 		{
 			Ring.Lock (ring.Name);
 		}
-		protected override bool Supported(KeyringItem ring)
+		protected override bool Supported (KeyringItem ring)
 		{
 			return !ring.Locked;
 		}
@@ -108,7 +108,7 @@ namespace Keyring
 		{
 			Ring.Unlock (ring.Name, null);
 		}
-		protected override bool Supported(KeyringItem ring)
+		protected override bool Supported (KeyringItem ring)
 		{
 			return ring.Locked;
 		}
@@ -153,8 +153,8 @@ namespace Keyring
 
 			yield break;
 		}
-		protected abstract void Run(KeyringItem ring);
-		protected abstract bool Supported(KeyringItem ring);
+		protected abstract void Run (KeyringItem ring);
+		protected abstract bool Supported (KeyringItem ring);
 	}
 
 
